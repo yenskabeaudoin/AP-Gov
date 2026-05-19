@@ -1,0 +1,639 @@
+
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Nexus: U.S. Foreign Affairs Repository</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent: #38bdf8;
+            --accent-hover: #7dd3fc;
+            
+            /* Layer Colors */
+            --layer-1: #10b981;
+            --layer-2: #eab308;
+            --layer-3: #f97316;
+            --layer-4: #ef4444;
+            --layer-5: #a855f7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding-bottom: 60px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Hero Section */
+        header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border-bottom: 1px solid var(--bg-tertiary);
+            padding: 80px 0 60px 0;
+            text-align: center;
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            margin-bottom: 15px;
+            letter-spacing: -0.02em;
+        }
+
+        header h1 span {
+            color: var(--accent);
+        }
+
+        header p {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            font-weight: 300;
+        }
+
+        /* Section Styling */
+        section {
+            margin: 60px 0;
+        }
+
+        section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--bg-tertiary);
+            padding-bottom: 10px;
+        }
+
+        /* Table Styling */
+        .table-container {
+            overflow-x: auto;
+            background-color: var(--bg-secondary);
+            border-radius: 8px;
+            border: 1px solid var(--bg-tertiary);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.95rem;
+        }
+
+        th, td {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--bg-tertiary);
+        }
+
+        th {
+            background-color: rgba(255, 255, 255, 0.02);
+            color: var(--text-primary);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.05em;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .rank-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background-color: rgba(56, 189, 248, 0.15);
+            color: var(--accent);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+        }
+
+        /* Dynamic Repository Controls */
+        .layer-nav {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
+        .layer-btn {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--bg-tertiary);
+            color: var(--text-secondary);
+            padding: 15px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            text-align: left;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .layer-btn .layer-title {
+            font-size: 1rem;
+            color: var(--text-primary);
+        }
+
+        .layer-btn .layer-desc {
+            font-size: 0.75rem;
+        }
+
+        .layer-btn:hover {
+            border-color: var(--text-secondary);
+            transform: translateY(-2px);
+        }
+
+        .layer-btn.active[data-layer="1"] { border-left: 4px solid var(--layer-1); background-color: rgba(16, 185, 129, 0.05); }
+        .layer-btn.active[data-layer="2"] { border-left: 4px solid var(--layer-2); background-color: rgba(234, 179, 8, 0.05); }
+        .layer-btn.active[data-layer="3"] { border-left: 4px solid var(--layer-3); background-color: rgba(249, 115, 22, 0.05); }
+        .layer-btn.active[data-layer="4"] { border-left: 4px solid var(--layer-4); background-color: rgba(239, 68, 68, 0.05); }
+        .layer-btn.active[data-layer="5"] { border-left: 4px solid var(--layer-5); background-color: rgba(168, 85, 247, 0.05); }
+        
+        .layer-btn.active .layer-title {
+            color: var(--accent);
+        }
+
+        /* Article Cards Grid */
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 25px;
+        }
+
+        @media (max-width: 600px) {
+            .articles-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .article-layer-wrapper {
+            display: none; /* Controlled by JS */
+        }
+
+        .article-layer-wrapper.active {
+            display: grid;
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        .article-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .article-card:hover {
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .topic-badge {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 20px;
+            background-color: rgba(255,255,255,0.05);
+        }
+
+        .article-title {
+            font-size: 1.3rem;
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 12px;
+            line-height: 1.4;
+            color: var(--text-primary);
+        }
+
+        .article-abstract {
+            color: var(--text-secondary);
+            font-size: 0.92rem;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 15px;
+        }
+
+        .source-name {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        /* Access Note Tip Box */
+        .tip-box {
+            background-color: rgba(56, 189, 248, 0.03);
+            border: 1px dashed rgba(56, 189, 248, 0.3);
+            padding: 15px 20px;
+            border-radius: 6px;
+            margin-top: 30px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <h1>Global Nexus: <span>U.S. Foreign Affairs</span></h1>
+            <p>A multi-layered library tracking current geopolitics, international macroeconomics, and important climate policy initiatives.</p>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <section id="credibility-system">
+            <h2> Source Credibility Ranking System </h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Credibility Rank</th>
+                            <th>Source Category</th>
+                            <th>Primary Examples</th>
+                            <th>Evaluation Criteria</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="rank-badge">Tier 1 (Apex)</span></td>
+                            <td class="source-name">Multifaceted Institutions & Peer-Reviewed Academic Journals</td>
+                            <td>IMF, IEA, World Bank, <i>International Security</i>, NBER</td>
+                            <td>Heavily peer-reviewed, includes dataset disclosures, and has decent institutional reputation.</td>
+                        </tr>
+                        <tr>
+                            <td><span class="rank-badge">Tier 2 (Strategic)</span></td>
+                            <td class="source-name">Non-Partisan Parties and Research Councils</td>
+                            <td>Brookings Institution, CSIS, Stimson Center, CFR</td>
+                            <td>Experts on the subject, rigorous policy impact metrics, detailed description of conflicts.</td>
+                        </tr>
+                        <tr>
+                            <td><span class="rank-badge">Tier 3 (Journalistic)</span></td>
+                            <td class="source-name">Tier-One International Press & Financial Record-Keepers</td>
+                            <td>Reuters, Financial Times, The Wall Street Journal, Bloomberg</td>
+                            <td>Direct sourcing, well fact checked, and comes from a reliable source.</td>
+                        </tr>
+                        <tr>
+                            <td><span class="rank-badge">Tier 4 (Analytical)</span></td>
+                            <td class="source-name">Specialized Foreign Affairs Columns & Expert Commentary</td>
+                            <td>Foreign Policy, Foreign Affairs, FPRI</td>
+                            <td>High analytical depth through first hand data and editorial view points. All information is correct and objective.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="repository">
+            <h2>Information Library</h2>
+            
+            <div class="layer-nav">
+                <button class="layer-btn active" data-layer="1">
+                    <span class="layer-title">🟢 Layer 1</span>
+                    <span class="layer-desc">Foundations & Brief Knowledge</span>
+                </button>
+                <button class="layer-btn" data-layer="2">
+                    <span class="layer-title">🟡 Layer 2</span>
+                    <span class="layer-desc">Summaries</span>
+                </button>
+                <button class="layer-btn" data-layer="3">
+                    <span class="layer-title">🟠 Layer 3</span>
+                    <span class="layer-desc">Policy Briefs</span>
+                </button>
+                <button class="layer-btn" data-layer="4">
+                    <span class="layer-title">🔴 Layer 4</span>
+                    <span class="layer-desc">Academic Papers</span>
+                </button>
+                <button class="layer-btn" data-layer="5">
+                    <span class="layer-title">🟣 Layer 5</span>
+                    <span class="layer-desc">Complex Studies and Thinking</span>
+                </button>
+            </div>
+
+            <div class="article-layer-wrapper articles-grid active" id="layer-content-1">
+                <div class="article-card">
+                    <div class="card-meta">
+                        <span class="topic-badge" style="color: #60a5fa;">Current Events</span>
+                    </div>
+                    <h3 class="article-title">Trump’s Beijing Summit: What the New Direct Line Means for US-China Relations</h3>
+                    <p class="article-abstract">A straightforward, real-time breakdown of the high-level takeaways from the May 2026 meetings between Washington and Beijing, focusing on initial bilateral commitments to cool trade tensions and establish direct crisis communications.</p>
+                    <div class="card-footer">
+                        <span class="source-name">Reuters</span>
+                        <span class="rank-badge">Tier 3</span>
+                    </div>
+                </div>
+
+                <div class="article-card">
+                    <div class="card-meta">
+                        <span class="topic-badge" style="color: #fca5a5;">Oil & Gas Geopolitics</span>
+                    </div>
+                    <h3 class="article-title">Why the Strait of Hormuz Standoff is Driving Domestic Gas Prices Up</h3>
+                    <p class="article-abstract">An introductory overview explaining the ongoing U.S. naval blockade of Iranian shipping lines and its immediate trickle-down effect on global energy prices and domestic consumer sentiment.</p>
+                    <div class="card-footer">
+                        <span class="source-name">The Washington Post</span>
+                        <span class="rank-badge">Tier 3</span>
+                    </div>
+                </div>
+
+                <div class="article-card">
+                    <div class="card-meta">
+                        <span class="topic-badge" style="color: #34d399;">Climate & Sustainable Tech</span>
+                    </div>
+                    <h3 class="article-title">The Race for Next-Gen Solar: How U.S. Tariffs Shift Clean Energy Supply Chains</h3>
+                    <p class="article-abstract">A narrative-driven explainer detailing how recent Western trade barriers impact the import of raw components necessary for manufacturing solar technology.</p>
+                    <div class="card-footer">
+                        <span class="source-name">Bloomberg Green</span>
+                        <span class="rank-badge">Tier 3</span>
+                    </div>
+                </div>
+
+                <div class="article-card">
+                    <div class="card-meta">
+                        <span class="topic-badge" style="color: #fef08a;">Global Economics</span>
+                    </div>
+                    <h3 class="article-title">Inflation in 2026: A Simple Guide to How Geopolitical Conflict Shrinks Your Wallet</h3>
+                    <p class="article-abstract">A clear economic primer mapping out the direct relationship between ongoing localized wars in the Middle East and the modest uptick in global headline inflation.</p>
+                    <div class="card-footer">
+                        <span class="source-name">The Wall Street Journal</span>
+                        <span class="rank-badge">Tier 3</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="article-layer-wrapper articles-grid" id="layer-content-2">
+                <div class="article-card">
+                    <div class="card-meta">
+                        <span class="topic-badge" style="color: #60a5fa;">Current Events</span>
+                    </div>
+                    <h3 class="article-title">The Dangerous Taiwan Gamble: Reading Between the Lines of the Trump-Xi Summit</h3>
+                    <p class="article-abstract">An in-depth journalistic evaluation of Secretary of State Marco Rubio's statements following the Beijing summit, probing the administration's transactional approach to security guarantees in the Indo-Pacific.</p>
+                    <div class="card-footer">
+                        <span class="source-name">Brookings Features</span>
+                        <span class="rank-badge">Tier 2</span>
+                    </div>
+                </div>
+
+                <div class="article-card">
+                    <div class="card-meta">
+                        <span class="topic-badge" style="color: #fca5a5;">Oil & Gas Geopolitics</span>
+                    </div>
+                    <h3 class="article-title">The Russian Oil Sanctions Loophole: Inside the Congressional Battle to End Relief</h3>
+                    <p class="article-abstract">Investigative piece tracking the political friction on Capitol Hill as Senate Democrats push the administration to terminate prolonged sanctions relief for Russian crude exports.</p>
+                    <div class="card-footer">
+                        <span class="source-name">Foreign Policy Magazine</span>
+                        <span class="rank-badge">Tier 4</span>
+                    </div>
+                </div>
+
+                <div class="article-card">
+                    <div class="card-meta">
+                        <span class="topic-badge" style="color: #34d399;">Climate & Sustainable Tech</span>
+                    </div>
+                    <h3 class="article-title">Sovereignty in the Great Green North: The Hidden Geopolitics of Clean-Tech in Greenland</h3>
+                    <p class="article-abstract">A detailed feature uncovering the intersection of NATO alliance tensions and the scramble by Western firms to secure Arctic rare-earth deposits vital for electric vehicle permanent magnets.</p>
+                    <div class="card-footer">
+                        <span class="source-name">The Guardian</span>
+                        <span class="rank-badge">Tier 3</span>
+                    </div>
+                </div>
+
+                <div class="article-card">
+                    <div class="card-meta">
+                        <span class="topic-badge" style="color: #fef08a;">Global Economics</span>
+                    </div>
+                    <h3 class="article-title">Trade Over Aid: Inside the State Department's New Global Economic Directive</h3>
+                    <p class="article-abstract">A comprehensive look into leaked diplomatic cables detailing Washington's aggressive maneuvers to replace traditional multilateral aid frameworks with "America First" bilateral trade pacts.</p>
+                    <div class="card-footer">
+                        <span class="source-name">Financial Times</span>
+                        <span class="rank-badge">Tier 3</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="article-layer-wrapper articles-grid" id="layer-content-3">
+                <div class="article-card">
+                    <div class="card-meta">
+                        <span class="topic-badge" style="color: #60a5fa;">Current Events</span>
+                    </div>
+                    <h3 class="article-title">Testing Assumptions About US Grand Strategy in 2026</h3>
+                    <p class="article-abstract">A rigorous critique of conventional Washington wisdom regarding personalist diplomacy, evaluating the resilience of alliances when commitments are framed as conditional or transactional.</p>
+                    <div class="card-footer">
+                        <span class="source-name">Stimson Center Policy Brief</span>
+                        <span class="rank-badge">Tier 2</span>
+                    </div>
+                </div>
+
+                <div class="article-card">
+                    <div class="card-meta">
+                        <span class="topic-badge" style="color: #fca5a5;">Oil & Gas Geopolitics</span>
+                    </div>
+                    <h3 class="article-title">Navigating the Minefields: Technical and Strategic Timelines for Reopening the Strait of Hormuz</h3>
+                    <p class="article-abstract">An operational intelligence brief reviewing the Pentagon's classified six-month mine-clearing timeline, projecting mid-term impacts on global liquid natural gas (LNG) distribution.</p>
+                    <div class="card-footer">
+                        <span class="source-name">CSIS</span>
+                        <span class="rank-badge">Tier 2</span>
+                    </div>
+                </div>
+
+                <div class="article-card">
+                    <div class="card-meta">
+                        <span class="topic-badge" style="color: #34d399;">Climate & Sustainable Tech</span>
+                    </div>
+                    <h3 class="article-title">Decoupling Decarbonization: Strategic Autonomy in Western Electric Vehicle Supply Networks</h3>
+                    <p class="article-abstract">A policy roadmap examining how the U.S. and EU can reconcile domestic industrial protectionism with the urgent need to secure supply chains for lithium-ion battery inputs from adversarial states.</p>
+                    <div class="card-footer">
+                        <span class="source-name">European Council on Foreign Relations</span>
+                        <span class="rank-badge">Tier 2</span>
+                    </div>
+                </div>
+
+                <div class="article-card">
+                    <div class="card-meta">
+                        <span class="topic-badge" style="color: #fef08a;">Global Economics</span>
+                    </div>
+                    <h3 class="article-title">The Weaponization of the IEEPA: The Supreme Court's Tariff Reversal and Its Global Repercussions</h3>
+                    <p class="article-abstract">An expert legal-economic brief examining the fallout after the U.S. Supreme Court ruled executive tariffs under the International Emergency Economic Powers Act unlawful, and how this shifts America's trade retaliation playbook.</p>
+                    <div class="card-footer">
+                        <span class="source-name">FPRI</span>
+                        <span class="rank-badge">Tier 4</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="article-layer-wrapper articles-grid" id="layer-content-4">
+                <div class="article-card">
+                    <div class="card-meta">
+                        <span class="topic-badge" style="color: #60a5fa;">Current Events</span>
+                    </div>
+                    <h3 class="article-title">Algorithmic Escalation: AI-Integrated Tactical Communications and Crisis Management in Modern Maritime Blockades</h3>
+                    <p class="article-abstract">A peer-reviewed study analyzing how the integration of automated cyber defense and AI-driven real-time combat decision systems alters the risk of unintended escalation during naval blockades.</p>
+                    <div class="card-footer">
+                        <span class="source-name">Journal of Strategic Studies</span>
+                        <span class="rank-badge">Tier 1</span>
+                    </div>
+                </div>
+
+                <div class="article-card">
+                    <div class="card-meta">
+                        <span class="topic-badge" style="color: #fca5a5;">Oil & Gas Geopolitics</span>
+                    </div>
+                    <h3 class="article-title">Petro-Diplomacy Under Elasticity Crises: Asymmetric Cartel Responses to Prolonged U.S. Sanctions Enforcement</h3>
+                    <p class="article-abstract">A quantitative analysis modeling supply-side price elasticities within OPEC+ nations, observing how cartel members structurally hedge against unilateral U.S. maritime interdictions.</p>
+                    <div class="card-footer">
+                        <span class="source-name">Energy Economics Journal</span>
+                        <span class="rank-badge">Tier 1</span>
+                    </div>
+                </div>
+
+                <div class="article-card">
+                    <div class="card-meta">
+                        <span class="topic-badge" style="color: #34d399;">Climate & Sustainable Tech</span>
+                    </div>
+                    <h3 class="article-title">Subsidizing the Transition: A Cross-National Econometric Evaluation of U.S. Green Industrial Policy Spillovers</h3>
+                    <p class="article-abstract">Utilizing multi-variable regression models to evaluate the exact capital-flight effects that U.S. clean-energy subsidies exert on clean-tech research and development sectors in allied European economies.</p>
+                    <div class="card-footer">
+                        <span class="source-name">Harvard Center for International Development</span>
+                        <span class="rank-badge">Tier 1</span>
+                    </div>
+                </div>
+
+                <div class="article-card">
+                    <div class="card-meta">
+                        <span class="topic-badge" style="color: #fef08a;">Global Economics</span>
+                    </div>
+                    <h3 class="article-title">World Economic Outlook: Global Economy in the Shadow of War</h3>
+                    <p class="article-abstract">A data-heavy report assessing the global growth slowdown to 3.1%, detailing the structural fiscal deficits and inflationary pressures sparked by widespread increases in national defense spending.</p>
+                    <div class="card-footer">
+                        <span class="source-name">IMF Research Department</span>
+                        <span class="rank-badge">Tier 1</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="article-layer-wrapper articles-grid" id="layer-content-5">
+                <div class="article-card">
+                    <div class="card-meta">
+                        <span class="topic-badge" style="color: #60a5fa;">Current Events</span>
+                    </div>
+                    <h3 class="article-title">The Post-Liberal Security Architecture: Predicting Alliance Attrition and Realignment Through Structural Realism</h3>
+                    <p class="article-abstract">An advanced theoretical treatise using game-theoretic modeling to forecast the long-term erosion of multilateral treaties under transaction-based foreign policy frameworks.</p>
+                    <div class="card-footer">
+                        <span class="source-name">International Security Journal</span>
+                        <span class="rank-badge">Tier 1</span>
+                    </div>
+                </div>
+
+                <div class="article-card">
+                    <div class="card-meta">
+                        <span class="topic-badge" style="color: #fca5a5;">Oil & Gas Geopolitics</span>
+                    </div>
+                    <h3 class="article-title">Chokepoint Econometrics: Dynamic General Equilibrium Modeling of Global Energy Restructuring Under Absolute Maritime Denial</h3>
+                    <p class="article-abstract">Constructs a Dynamic Stochastic General Equilibrium (DSGE) model to simulate permanent global trade re-routing vectors and long-term capital depreciation resulting from multi-month chokepoint closures.</p>
+                    <div class="card-footer">
+                        <span class="source-name">Oxford Review of Economic Policy</span>
+                        <span class="rank-badge">Tier 1</span>
+                    </div>
+                </div>
+
+                <div class="article-card">
+                    <div class="card-meta">
+                        <span class="topic-badge" style="color: #34d399;">Climate & Sustainable Tech</span>
+                    </div>
+                    <h3 class="article-title">Macro-Critical Risks of Fragmented Decarbonization: A General Equilibrium Framework for Cross-Border Carbon Adjustments</h3>
+                    <p class="article-abstract">An elite working paper outlining the mathematical modeling of macroeconomic shocks triggered by uncoordinated green industrial hoarding, carbon tariffs, and unilateral clean-tech technology restrictions.</p>
+                    <div class="card-footer">
+                        <span class="source-name">NBER</span>
+                        <span class="rank-badge">Tier 1</span>
+                    </div>
+                </div>
+
+                <div class="article-card">
+                    <div class="card-meta">
+                        <span class="topic-badge" style="color: #fef08a;">Global Economics</span>
+                    </div>
+                    <h3 class="article-title">Monetary Hegemony in a Bipolar Trade Regime: The Resilience of the Petrodollar Amid Sino-American De-Risking</h3>
+                    <p class="article-abstract">A complex econometric paper calculating clearing-mechanism volatility, central bank reserve diversification metrics, and the structural longevity of the U.S. dollar against emerging parallel digital liquidity networks.</p>
+                    <div class="card-footer">
+                        <span class="source-name">Quarterly Journal of Economics</span>
+                        <span class="rank-badge">Tier 1</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <span style="font-size: 1.2rem;">💡</span>
+                <p><strong>Navigation Tip:</strong> I hope this furthers your understanding of our world.</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        document.querySelectorAll('.layer-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active status from all buttons
+                document.querySelectorAll('.layer-btn').forEach(btn => btn.classList.remove('active'));
+                // Close all layer wrapper contents
+                document.querySelectorAll('.article-layer-wrapper').forEach(wrapper => wrapper.classList.remove('active'));
+                
+                // Add active status to clicked button
+                button.classList.add('active');
+                // Target and display the specific layer wrapper content
+                const layerId = button.getAttribute('data-layer');
+                document.getElementById(`layer-content-${layerId}`).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
+
+```
